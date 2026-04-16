@@ -1,43 +1,91 @@
-l = [
-    ["Asus Vivobook", 7000000, 3],
-    ["Acer Aspire", 6500000, 2],
-    ["Lenovo IdeaPad", 8000000, 5]
+daftar_laptop = [
+    {
+        "nama": "Asus Vivobook",
+        "harga": 7000000,
+        "stok": 3
+    },
+    {
+        "nama": "Acer Aspire",
+        "harga": 6500000,
+        "stok": 2
+    },
+    {
+        "nama": "Lenovo IdeaPad",
+        "harga": 8000000,
+        "stok": 5
+    }
 ]
 
-while True:
-    print("\n=== TOKO LAPTOP ===")
+
+def tampilkan_menu():
+    print("=== TOKO LAPTOP ===")
     print("1. Lihat Laptop")
     print("2. Beli Laptop")
     print("3. Keluar")
 
-    x = input("Pilih menu: ")
 
-    if x == "1":
-        for i in range(len(l)):
-            print(str(i+1) + ". " + l[i][0] + " - Rp" + str(l[i][1]) + " - Stok: " + str(l[i][2]))
+def tampilkan_laptop():
+    print("Daftar Laptop:")
 
-    elif x == "2":
-        for i in range(len(l)):
-            print(str(i+1) + ". " + l[i][0])
+    for nomor, laptop in enumerate(daftar_laptop, start=1):
+        print(
+            f"{nomor}. {laptop['nama']} | "
+            f"Harga: Rp{laptop['harga']} | "
+            f"Stok: {laptop['stok']}"
+        )
 
-        a = int(input("Pilih laptop: ")) - 1
-        b = int(input("Jumlah beli: "))
 
-        # proses beli laptop
-        if a >= 0 and a < len(l):
-            if l[a][2] >= b:
-                total = l[a][1] * b
-                l[a][2] = l[a][2] - b
-                print("Berhasil beli")
-                print("Total bayar = Rp" + str(total))
-            else:
-                print("stok tidak cukup")
+def beli_laptop():
+    tampilkan_laptop()
+
+    try:
+        pilihan_laptop = int(input("Pilih laptop: ")) - 1
+        jumlah_beli = int(input("Jumlah beli: "))
+    except ValueError:
+        print("Input harus berupa angka.")
+        return
+
+    if pilihan_laptop < 0 or pilihan_laptop >= len(daftar_laptop):
+        print("Pilihan laptop tidak valid.")
+        return
+
+    laptop_terpilih = daftar_laptop[pilihan_laptop]
+
+    if jumlah_beli <= 0:
+        print("Jumlah beli harus lebih dari 0.")
+        return
+
+    if jumlah_beli > laptop_terpilih["stok"]:
+        print("Stok tidak mencukupi.")
+        return
+
+    total_harga = laptop_terpilih["harga"] * jumlah_beli
+    laptop_terpilih["stok"] -= jumlah_beli
+
+    print("Pembelian berhasil!")
+    print(f"Laptop : {laptop_terpilih['nama']}")
+    print(f"Jumlah : {jumlah_beli}")
+    print(f"Total  : Rp{total_harga}")
+
+
+
+def program_utama():
+    while True:
+        tampilkan_menu()
+        pilihan_menu = input("Pilih menu: ")
+
+        if pilihan_menu == "1":
+            tampilkan_laptop()
+
+        elif pilihan_menu == "2":
+            beli_laptop()
+
+        elif pilihan_menu == "3":
+            print("Terima kasih telah menggunakan aplikasi.")
+            break
+
         else:
-            print("pilihan salah")
+            print("Menu tidak tersedia.")
 
-    elif x == "3":
-        print("terima kasih")
-        break
 
-    else:
-        print("menu salah")
+program_utama()
